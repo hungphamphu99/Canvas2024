@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Rectangle Canvas</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="300" height="200" ;"></canvas>
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Back ground
+        ctx.fillStyle = "red";
+        
+        //  X: 50, Y: 50 weight 200 và height 100
+        ctx.fillRect(50, 50, 200, 100);
+    </script>
+</body>
+</html>
