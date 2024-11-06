@@ -17,15 +17,22 @@
         // Begin the path to draw the right triangle outline
         ctx.beginPath();
         ctx.moveTo(offsetX, offsetY); 
-        // Start at the top-left corner
+        // Start at the top-left 
+
         ctx.lineTo(offsetX, offsetY + 100); 
         // Draw the vertical line for the height (100px)
+        
         ctx.lineTo(offsetX + 200, offsetY + 100); 
         // Draw the base (200px)
+
         ctx.lineTo(offsetX, offsetY); 
         // Draw back to the starting point to form the hypotenuse
+
+
         ctx.strokeStyle = "black";
         ctx.lineWidth = 4;
+
+        // back ground Triangle
         // ctx.fillStyle = "black";
         // ctx.fill();
 
