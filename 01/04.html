@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Shapes</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Center y-position for all shapes
+        const centerY = 200;
+
+        const sideLength = 50 * Math.sqrt(2); // Adjusted side length for rotated square
+
+        // Draw rotated square (45 degrees)
+        ctx.save();
+        ctx.translate(100, centerY);
+        ctx.rotate((45 * Math.PI) / 180);
+        ctx.fillStyle = "purple";
+        ctx.fillRect(-sideLength / 2, -sideLength / 2, sideLength, sideLength);
+        ctx.restore();
+
+        // Draw regular pentagon
+        const drawPolygon = (x, y, radius, sides, fillColor) => {
+            ctx.beginPath();
+            for (let i = 0; i < sides; i++) {
+                const angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
+                const px = x + radius * Math.cos(angle);
+                const py = y + radius * Math.sin(angle);
+                i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+        };
+
+        drawPolygon(300, centerY, 50, 5, "lightgreen"); // Pentagon with 5 sides
+        drawPolygon(500, centerY, 50, 6, "gold");       // Hexagon with 6 sides
+
+    </script>
+</body>
+</html>
