@@ -3,38 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star</title>
+    <title> Star</title>
 </head>
 <body>
-    <canvas id="starCanvas" width="500" height="200" style="border:1px solid #000;"></canvas>
+    <canvas id="starCanvas" width="10000" height="10000" style="border:1px solid #000;"></canvas>
 
     <script>
         var canvas = document.getElementById("starCanvas");
         var ctx = canvas.getContext("2d");
 
-        function drawStar(x, y, radius, sides, strokeColor, lineWidth) {
-            var points = sides || 5;
-            var angleStep = (2 * Math.PI) / (points * 2); 
+        function drawStarSkipAdjacent(x, y, radius, points, strokeColor, lineWidth) {
+            var angleStep = (2 * Math.PI) / points;
+
+            const vertices = [];
+            for (let i = 0; i < points; i++) {
+                const angle = -Math.PI / 2 + i * angleStep;
+                const px = x + radius * Math.cos(angle);
+                const py = y + radius * Math.sin(angle);
+                vertices.push({ x: px, y: py });
+            }
 
             ctx.beginPath();
-            ctx.moveTo(x + radius * Math.cos(0), y + radius * Math.sin(0)); 
-
-            for (var i = 0; i < points * 2; i++) {
-                var r = (i % 2 === 0) ? radius : radius / 2;
-                var a = i * angleStep; 
-                ctx.lineTo(x + r * Math.cos(a), y + r * Math.sin(a)); 
-            }
-            
-            ctx.closePath();
-
             ctx.strokeStyle = strokeColor;
             ctx.lineWidth = lineWidth;
-            ctx.stroke(); 
-        }
 
-        drawStar(100, 100, 50, 5, "black", 2); 
-        drawStar(250, 100, 50, 6, "black", 2); 
-        drawStar(400, 100, 50, 7, "black", 2); 
+            for (let i = 0; i < points; i++) {
+                for (let j = i + 2; j < points + i - 1; j++) {
+                    const targetIndex = j % points; 
+                    ctx.moveTo(vertices[i].x, vertices[i].y);
+                    ctx.lineTo(vertices[targetIndex].x, vertices[targetIndex].y);
+                }
+            }
+
+            ctx.stroke();
+        }
+        drawStarSkipAdjacent(150, 150, 100, 5, "black", 2); 
+        drawStarSkipAdjacent(450, 450, 100, 6, "black", 2); 
+        drawStarSkipAdjacent(150, 450, 100, 7, "black", 2); 
+        drawStarSkipAdjacent(450, 150, 100, 8, "black", 2); 
     </script>
 </body>
 </html>
