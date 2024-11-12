@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vẽ ngôi sao viền</title>
+</head>
+<body>
+    <canvas id="starCanvas" width="500" height="200" style="border:1px solid #000;"></canvas>
+
+    <script>
+        var canvas = document.getElementById("starCanvas");
+        var ctx = canvas.getContext("2d");
+
+        function drawStar(x, y, radius, sides, strokeColor, lineWidth) {
+            var points = sides || 5;
+            var angleStep = (2 * Math.PI) / (points * 2); 
+
+            ctx.beginPath();
+            ctx.moveTo(x + radius * Math.cos(0), y + radius * Math.sin(0)); 
+
+            for (var i = 0; i < points * 2; i++) {
+                var r = (i % 2 === 0) ? radius : radius / 2;
+                var a = i * angleStep; 
+                ctx.lineTo(x + r * Math.cos(a), y + r * Math.sin(a)); 
+            }
+            
+            ctx.closePath();
+
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = lineWidth;
+            ctx.stroke(); 
+        }
+
+        drawStar(100, 100, 50, 5, "black", 2); 
+        drawStar(250, 100, 50, 6, "black", 2); 
+        drawStar(400, 100, 50, 7, "black", 2); 
+    </script>
+</body>
+</html>
