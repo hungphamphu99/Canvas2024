@@ -1,47 +1,45 @@
-const ball = document.querySelector('.ball');
-const container = document.querySelector('.container');
+const ball = document.getElementById('ball');
+const container = document.getElementById('container');
 
-let g = 9.8; 
-let initialHeight = 500; 
-let position = initialHeight;
-let velocity = 50; 
-let interval = 60; 
-let ground = 0; 
-let energyLossFactor = 0.6; 
+let gravity = 9.8; // Acceleration due to gravity (m/s^2)
+let bounceEfficiency = 0.7; // Energy retained after each bounce
+let velocity = 0; // Initial velocity
+let position = container.clientHeight - ball.offsetHeight; // Start at the top
+let isFalling = true;
+let animationFrame;
 
-// Hàm cập nhật
-function update() {
-  // Tăng vận tốc do gia tốc trọng trường
-  velocity += g * (interval / 1000); // v = g.t
+// Set the ball at the top of the container initially
+ball.style.bottom = `${position}px`;
 
-  // Tính vị trí mới
-  position -= velocity * (interval / 1000); // s = v.t
+function updateBallPosition() {
+  if (isFalling) {
+    velocity += gravity * 0.016; // Increase velocity with gravity (16ms/frame)
+    position -= velocity;
 
-  // Kiểm tra chạm đất
-  if (position <= ground) {
-    position = ground; // Đặt lại vị trí bóng ở mặt đất
+    if (position <= 0) {
+      // Ball hits the ground
+      position = 0;
+      velocity = -velocity * bounceEfficiency; // Reverse velocity with bounce efficiency
+      if (Math.abs(velocity) < 1) {
+        // Stop bouncing if velocity is too low
+        cancelAnimationFrame(animationFrame);
+        return;
+      }
+    }
+  } else {
+    // Ball rising
+    velocity -= gravity * 0.016; // Decrease velocity
+    position -= velocity;
 
-    // Tính năng lượng sau va chạm
-    let kineticEnergy = (1 / 2) * velocity ** 2; // Động năng tại thời điểm chạm đất
-    let remainingEnergy = kineticEnergy * energyLossFactor; // Năng lượng còn lại
-
-    // Tính vận tốc phục hồi từ năng lượng còn lại
-    velocity = Math.sqrt(2 * remainingEnergy); // v = sqrt(2 * E / m)
-
-    // Đảo chiều vận tốc để bóng nảy lên
-    velocity = -velocity;
-
-    // Dừng khi năng lượng còn lại rất nhỏ
-    if (remainingEnergy < 1) {
-      position = ground;
-      velocity = 0;
-      return; // Ngừng cập nhật
+    if (velocity > 0) {
+      isFalling = true;
     }
   }
 
-  // Cập nhật vị trí bóng trong giao diện
+  // Update ball position
   ball.style.bottom = `${position}px`;
+  animationFrame = requestAnimationFrame(updateBallPosition);
 }
 
-// Chạy animation
-setInterval(update, interval);
+// Start the animation
+updateBallPosition();
